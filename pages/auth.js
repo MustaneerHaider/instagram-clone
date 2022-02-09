@@ -4,7 +4,7 @@ import Input from '../components/Input';
 import * as yup from 'yup';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { getSession, signIn } from 'next-auth/react';
 import { ToastContainer, toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import 'react-toastify/dist/ReactToastify.css';

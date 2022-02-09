@@ -176,7 +176,7 @@ function Post({
 			{/* comments */}
 			{comments.length > 0 && (
 				<FlipMove
-					className='px-4 bg-white space-y-2 h-16 overflow-y-scroll
+					className='pl-5 pr-4 bg-white space-y-2 h-16 overflow-y-scroll
       scrollbar-thin scrollbar-thumb-black mb-2'
 				>
 					{comments?.map(({ id, user, comment, createdtAt }) => (

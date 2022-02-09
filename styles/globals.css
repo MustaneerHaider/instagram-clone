@@ -17,4 +17,9 @@
 		@apply p-2 w-full outline-none bg-blue-400 border-blue-300
     rounded-md text-white text-sm active:ring-2 active:ring-blue-500;
 	}
+
+	.navAlt {
+		@apply h-6 md:hidden cursor-pointer hover:scale-125
+    transition transform duration-150 ease-out;
+	}
 }

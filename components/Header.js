@@ -56,6 +56,7 @@ function Header({ onOpenModal }) {
 				{/* Right */}
 				<div className='flex items-center space-x-4'>
 					<HomeIcon className='navBtn' />
+					<MenuIcon className='navAlt' />
 					<div className='relative'>
 						<span
 							className='hidden md:flex absolute top-0 right-0 bg-red-500
@@ -66,15 +67,9 @@ function Header({ onOpenModal }) {
 						</span>
 						<PaperAirplaneIcon className='navBtn rotate-45' />
 					</div>
-
-					<PlusCircleIcon className='navBtn' onClick={onOpenModal} />
+					<PlusCircleIcon className='navAlt' onClick={onOpenModal} />
 					<UserGroupIcon className='navBtn' />
 					<HeartIcon className='navBtn' />
-					<MenuIcon
-						className='h-6 md:hidden cursor-pointer hover:scale-125
-          transition transform duration-150 ease-out'
-						onClick={onOpenModal}
-					/>
 
 					<div className='relative h-8 w-8' onClick={signOut}>
 						<Image
