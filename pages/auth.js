@@ -40,6 +40,7 @@ async function createUser(user) {
 function Auth() {
 	const [isLogin, setLogin] = useState(true);
 	const [imageSrc, setImageSrc] = useState('');
+	const [uploading, setUploading] = useState(false);
 	const router = useRouter();
 	const filePickerRef = useRef(null);
 
@@ -67,7 +68,6 @@ function Auth() {
 			if (!imageSrc) return;
 			try {
 				const result = await createUser({ ...values, image: imageSrc });
-				console.log(result);
 				setLogin(true);
 			} catch (error) {
 				toast.error(error.message, {
@@ -85,12 +85,15 @@ function Auth() {
 	};
 
 	const handleFileUpload = async event => {
+		if (uploading) return;
+
 		const file = event.target.files[0];
 
 		const fd = new FormData();
 		fd.append('file', file);
 		fd.append('upload_preset', 'my-uploads');
 
+		setUploading(true);
 		const result = await fetch(
 			'https://api.cloudinary.com/v1_1/diezkb6ih/image/upload',
 			{
@@ -98,9 +101,8 @@ function Auth() {
 				body: fd
 			}
 		).then(res => res.json());
-
+		setUploading(false);
 		setImageSrc(result.secure_url);
-		console.log(result);
 	};
 
 	return (

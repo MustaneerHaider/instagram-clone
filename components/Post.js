@@ -94,12 +94,11 @@ function Post({
 	};
 
 	const deletePostHandler = async () => {
-		const result = await fetch(`/api/post/delete/${id}`, {
+		await fetch(`/api/post/delete/${id}`, {
 			method: 'DELETE'
 		}).then(res => res.json());
 
 		onDelete(id);
-		console.log(result);
 	};
 
 	return (

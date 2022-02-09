@@ -69,8 +69,6 @@ function Modal({ show, onCloseModal, onAddPost }) {
 		setLoading(false);
 		onCloseModal();
 		setImageToPost('');
-
-		console.log(data);
 	};
 
 	return (
