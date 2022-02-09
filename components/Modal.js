@@ -43,7 +43,7 @@ function Modal({ show, onCloseModal, onAddPost }) {
 		if (loading) return;
 
 		setLoading(true);
-		const data = await fetch('/api/create-post', {
+		const data = await fetch('/api/post/create', {
 			method: 'POST',
 			body: JSON.stringify({
 				caption: captionRef.current.value,
@@ -56,6 +56,8 @@ function Modal({ show, onCloseModal, onAddPost }) {
 		const postData = {
 			...data.post,
 			createdAt: moment(data.post.createdAt).unix(),
+			likes: [],
+			comments: [],
 			author: {
 				name: session.user.name,
 				image: session.user.image

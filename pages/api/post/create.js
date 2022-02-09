@@ -1,5 +1,5 @@
 import { getSession } from 'next-auth/react';
-import prisma from '../../lib/db';
+import prisma from '../../../lib/db';
 
 async function handler(req, res) {
 	if (req.method !== 'POST') {
@@ -13,7 +13,6 @@ async function handler(req, res) {
 	}
 
 	const session = await getSession({ req });
-	const prisma = new PrismaClient();
 
 	const user = await prisma.user.findUnique({
 		where: { email: session.user.email }

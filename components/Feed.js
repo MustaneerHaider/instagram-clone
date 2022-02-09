@@ -3,7 +3,7 @@ import Posts from './Posts';
 import Stories from './Stories';
 import Suggestions from './Suggestions';
 
-function Feed({ posts }) {
+function Feed({ posts, onDeletePost }) {
 	return (
 		<div
 			className='grid grid-cols-1 md:grid-cols-2 md:max-w-2xl
@@ -11,7 +11,7 @@ function Feed({ posts }) {
 		>
 			<section className='col-span-2'>
 				<Stories />
-				<Posts posts={posts} />
+				<Posts posts={posts} onDeletePost={onDeletePost} />
 			</section>
 
 			<section className='hidden xl:inline-grid'>

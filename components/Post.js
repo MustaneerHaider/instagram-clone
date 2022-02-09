@@ -5,8 +5,10 @@ import {
 	BookmarkIcon,
 	ChatAltIcon,
 	PaperAirplaneIcon,
-	EmojiHappyIcon
+	EmojiHappyIcon,
+	TrashIcon
 } from '@heroicons/react/outline';
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/solid';
 import { useState } from 'react';
 import Comment from './Comment';
 import { useSession } from 'next-auth/react';
@@ -19,10 +21,15 @@ function Post({
 	createdAt,
 	author,
 	id,
-	comments: postComments
+	comments: postComments,
+	hasLiked,
+	likes,
+	onDelete
 }) {
 	const [input, setInput] = useState('');
 	const [comments, setComments] = useState(postComments);
+	const [liked, setHasLiked] = useState(hasLiked);
+	const [postLikes, setPostLikes] = useState(likes);
 	const { data: session } = useSession();
 
 	const addCommentToPost = async event => {
@@ -30,7 +37,7 @@ function Post({
 
 		if (!input) return;
 
-		const result = await fetch('/api/comment', {
+		const result = await fetch(`/api/post/comment/${id}`, {
 			method: 'POST',
 			body: JSON.stringify({
 				comment: input,
@@ -53,65 +60,145 @@ function Post({
 		});
 
 		setInput('');
+	};
 
-		console.log('Comment', result);
+	const likePostHandler = async () => {
+		if (liked) {
+			// delete like on the post
+			await fetch(`/api/post/like/${id}`, {
+				method: 'DELETE'
+			}).then(res => res.json());
+			setHasLiked(false);
+			setPostLikes(prevLikes => {
+				const newLikes = prevLikes.filter(
+					like => like.user.email !== session.user.email
+				);
+				return newLikes;
+			});
+		} else {
+			// add like to the post
+			await fetch(`/api/post/like/${id}`, {
+				method: 'POST'
+			}).then(res => res.json());
+			setHasLiked(true);
+			setPostLikes(prevLikes => {
+				const newLikes = [...prevLikes];
+				newLikes.push({
+					user: {
+						email: session.user.email
+					}
+				});
+				return newLikes;
+			});
+		}
+	};
+
+	const deletePostHandler = async () => {
+		const result = await fetch(`/api/post/delete/${id}`, {
+			method: 'DELETE'
+		}).then(res => res.json());
+
+		onDelete(id);
+		console.log(result);
 	};
 
 	return (
 		<div className='border bg-white'>
 			{/* header */}
-			<div className='bg-white p-5'>
-				<div className='flex items-center '>
-					<div className='relative h-10 w-10'>
-						<Image
-							src={author.image}
-							layout='fill'
-							alt=''
-							className='cursor-pointer rounded-full'
-						/>
-					</div>
-					<p className='ml-3 flex-1 text-sm font-semibold'>
-						{author.name}
-					</p>
-
-					<DotsHorizontalIcon className='h-6 cursor-pointer' />
+			<div className='bg-white p-5 flex items-center border-b'>
+				<div className='relative h-10 w-10'>
+					<Image
+						src={author.image}
+						layout='fill'
+						alt=''
+						className='cursor-pointer rounded-full'
+					/>
 				</div>
 
-				{/* caption */}
-				<p className='mt-2 text-sm'>{caption}</p>
+				<p className='ml-3 flex-1 text-sm font-semibold'>
+					{author.name}
+				</p>
+
+				<div
+					className='h-8 w-8 hover:bg-gray-100 flex justify-center items-center
+        cursor-pointer rounded-full relative group'
+				>
+					<div
+						className='hidden group-hover:flex p-2 rounded-md 
+            shadow-sm bg-gray-800 absolute top-6 text-xs'
+					>
+						<TrashIcon
+							className='h-6 w-6 text-red-500 hover:animate-bounce'
+							onClick={deletePostHandler}
+						/>
+					</div>
+					<DotsHorizontalIcon className='h-6' />
+				</div>
 			</div>
 
 			{/* image */}
-			<img src={image} className='w-full object-cover cursor-pointer' />
+			<img
+				src={image}
+				className='w-full object-cover cursor-pointer'
+				loading='lazy'
+			/>
 
 			{/* actions */}
 			<div className='bg-white p-4 flex items-center justify-between'>
 				<div className='space-x-4 flex items-center'>
-					<HeartIcon className='icon' />
+					{liked ? (
+						<HeartIconSolid
+							className='h-6 sm:h-7 text-red-500 cursor-pointer
+              hover:scale-125 transition transform duration-150'
+							onClick={likePostHandler}
+						/>
+					) : (
+						<HeartIcon className='icon' onClick={likePostHandler} />
+					)}
 					<ChatAltIcon className='icon' />
 					<PaperAirplaneIcon className='icon rotate-45' />
 				</div>
 				<BookmarkIcon className='icon' />
 			</div>
 
+			{/* likes */}
+			{postLikes.length > 0 && (
+				<p className='text-sm pl-4 mb-2 font-bold -mt-1'>
+					{postLikes?.length} likes
+				</p>
+			)}
+
+			{/* caption */}
+			<p className='mb-3 flex pl-4'>
+				<span className='text-sm font-semibold'>{author.name}</span>
+				<span className='truncate text-sm ml-1.5'>{caption}</span>
+			</p>
+
 			{/* comments */}
-			<FlipMove
-				className='px-4 bg-white space-y-2 h-16 overflow-y-scroll
-      scrollbar-thin scrollbar-thumb-black'
-			>
-				{comments?.map(({ id, user, comment, createdtAt }) => (
-					<Comment
-						key={id}
-						username={user.name}
-						img={user.image}
-						comment={comment}
-						createdAt={createdtAt}
-					/>
-				))}
-			</FlipMove>
+			{comments.length > 0 && (
+				<FlipMove
+					className='px-4 bg-white space-y-2 h-16 overflow-y-scroll
+      scrollbar-thin scrollbar-thumb-black mb-2'
+				>
+					{comments?.map(({ id, user, comment, createdtAt }) => (
+						<Comment
+							key={id}
+							username={user.name}
+							img={user.image}
+							comment={comment}
+							createdAt={createdtAt}
+						/>
+					))}
+				</FlipMove>
+			)}
+
+			{/* creation date */}
+			<h4 className='uppercase text-[11px] text-gray-500 pl-4'>
+				{moment.unix(createdAt).fromNow()}
+			</h4>
 
 			{/* add comment */}
-			<form className='bg-white flex p-3 border-t mt-2'>
+			<form className='bg-white flex p-3 border-t mt-4'>
 				<EmojiHappyIcon className='h-6 sm:h-7' />
 				<input
 					value={input}
@@ -122,7 +209,7 @@ function Post({
 				/>
 				<button
 					className='text-blue-300 text-sm ml-1 font-semibold
-          disabled:cursor-not-allowed disabled:text-gray-300'
+          disabled:cursor-not-allowed disabled:text-blue-200'
 					onClick={addCommentToPost}
 					disabled={!input}
 				>

@@ -56,7 +56,17 @@ function Header({ onOpenModal }) {
 				{/* Right */}
 				<div className='flex items-center space-x-4'>
 					<HomeIcon className='navBtn' />
-					<PaperAirplaneIcon className='navBtn rotate-45' />
+					<div className='relative'>
+						<span
+							className='hidden md:flex absolute top-0 right-0 bg-red-500
+            rounded-full h-4 w-4 text-xs justify-center text-white z-10
+            '
+						>
+							3
+						</span>
+						<PaperAirplaneIcon className='navBtn rotate-45' />
+					</div>
+
 					<PlusCircleIcon className='navBtn' onClick={onOpenModal} />
 					<UserGroupIcon className='navBtn' />
 					<HeartIcon className='navBtn' />

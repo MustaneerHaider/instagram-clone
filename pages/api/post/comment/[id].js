@@ -1,12 +1,12 @@
 import { getSession } from 'next-auth/react';
-import prisma from '../../lib/db';
+import prisma from '../../../../lib/db';
 
 async function handler(req, res) {
 	if (req.method !== 'POST') {
 		return;
 	}
 
-	const { comment, postId } = req.body;
+	const { comment } = req.body;
 
 	if (!comment) {
 		return res.status(422).json({ message: 'Missing comment.' });
@@ -21,7 +21,7 @@ async function handler(req, res) {
 	const createdComment = await prisma.comment.create({
 		data: {
 			comment,
-			postId,
+			postId: req.query.id,
 			userId: user.id
 		}
 	});

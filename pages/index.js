@@ -27,8 +27,15 @@ export default function Home({ posts: data }) {
 		});
 	};
 
+	const removePostHandler = pId => {
+		setPosts(prevPosts => {
+			const newPosts = prevPosts.filter(post => post.id !== pId);
+			return newPosts;
+		});
+	};
+
 	return (
-		<div className='bg-gray-50'>
+		<div className='bg-gray-100 min-h-screen'>
 			<Head>
 				<title>Instagram Clone</title>
 				<meta
@@ -45,7 +52,7 @@ export default function Home({ posts: data }) {
 			/>
 
 			<Header onOpenModal={openModalHandler} />
-			<Feed posts={posts} />
+			<Feed posts={posts} onDeletePost={id => removePostHandler(id)} />
 		</div>
 	);
 }
@@ -80,6 +87,15 @@ export async function getServerSideProps(context) {
 						select: {
 							name: true,
 							image: true
+						}
+					}
+				}
+			},
+			likes: {
+				select: {
+					user: {
+						select: {
+							email: true
 						}
 					}
 				}
