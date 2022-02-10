@@ -118,16 +118,22 @@ function Modal({ show, onCloseModal, onAddPost }) {
 							>
 								<form className='flex flex-col'>
 									{!imageToPost ? (
-										<div
-											className='bg-gray-200 h-24 w-24 flex items-center justify-center
+										<div>
+											<div
+												className='bg-red-50 h-16 w-16 flex items-center justify-center
                     rounded-full mx-auto'
-										>
-											<CameraIcon
-												className='h-16 text-red-500 cursor-pointer'
-												onClick={() =>
-													filePickerRef.current.click()
-												}
-											/>
+											>
+												<CameraIcon
+													className='h-10 text-red-400 cursor-pointer'
+													onClick={() =>
+														filePickerRef.current.click()
+													}
+												/>
+											</div>
+
+											<p className='mt-3 text-xl text-gray-600'>
+												Upload a Photo
+											</p>
 										</div>
 									) : (
 										<img
@@ -146,8 +152,8 @@ function Modal({ show, onCloseModal, onAddPost }) {
 									<input
 										type='text'
 										ref={captionRef}
-										placeholder='Enter a caption...'
-										className='outline-none my-4 text-sm'
+										placeholder='Please enter a caption...'
+										className='outline-none my-4 text-lg mx-auto'
 									/>
 
 									<button
