@@ -3,6 +3,7 @@ import { Fragment, useRef, useState } from 'react';
 import { CameraIcon } from '@heroicons/react/outline';
 import moment from 'moment-mini';
 import { useSession } from 'next-auth/react';
+import ClientSidePortal from './ClientSidePortal';
 
 function Modal({ show, onCloseModal, onAddPost }) {
 	const [imageToPost, setImageToPost] = useState('');
@@ -72,11 +73,11 @@ function Modal({ show, onCloseModal, onAddPost }) {
 	};
 
 	return (
-		<>
-			<Transition show={show} as={Fragment}>
+		<ClientSidePortal selector='#overlay'>
+			<Transition.Root show={show} as={Fragment}>
 				<Dialog
 					as='div'
-					className='fixed inset-0 z-50 overflow-y-auto'
+					className='fixed inset-0 z-20 overflow-y-auto'
 					onClose={onCloseModal}
 				>
 					<div className='min-h-screen px-4 text-center'>
@@ -169,8 +170,8 @@ function Modal({ show, onCloseModal, onAddPost }) {
 						</Transition.Child>
 					</div>
 				</Dialog>
-			</Transition>
-		</>
+			</Transition.Root>
+		</ClientSidePortal>
 	);
 }
 
