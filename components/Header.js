@@ -49,7 +49,7 @@ function Header({ onOpenModal }) {
 					<input
 						type='text'
 						placeholder='Search'
-						className='ml-2 outline-none bg-transparent'
+						className='hidden sm:inline-flex ml-2 outline-none bg-transparent'
 					/>
 				</div>
 
