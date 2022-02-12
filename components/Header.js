@@ -37,7 +37,7 @@ function Header({ onOpenModal }) {
           cursor-pointer'
 				>
 					<Image
-						src='https://links.papareact.com/ocw'
+						src='https://links.papareact.com/jjm'
 						layout='fill'
 						objectFit='contain'
 						alt=''
