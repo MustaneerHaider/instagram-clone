@@ -21,7 +21,19 @@ function Header({ onOpenModal }) {
 			>
 				{/* Left */}
 				<div
-					className='relative h-10 w-24
+					className='hidden lg:inline-flex relative h-10 w-24
+          cursor-pointer'
+				>
+					<Image
+						src='https://links.papareact.com/ocw'
+						layout='fill'
+						objectFit='contain'
+						alt=''
+					/>
+				</div>
+
+				<div
+					className='lg:hidden relative h-10 w-10
           cursor-pointer'
 				>
 					<Image
@@ -34,7 +46,7 @@ function Header({ onOpenModal }) {
 
 				{/* Middle */}
 				<div
-					className='hidden sm:flex items-center p-2 bg-gray-100 rounded-lg
+					className='flex items-center p-2 bg-gray-100 rounded-lg
         focus-within:shadow-md'
 				>
 					<SearchIcon className='h-5 text-gray-500' />
